@@ -33,10 +33,29 @@ import '@ionic/vue/css/palettes/dark.system.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import axios from 'axios';
+
+axios.interceptors.request.use(
+  (config) => {
+    config.headers["Access-Control-Allow-Origin"] = "*";
+    config.headers["Content-type"] = "Application/json";
+
+    if (localStorage.getItem("token") != null) {
+      config.headers["Authorization"] = `Bearer ${localStorage.getItem(
+        "token"
+      )}`;
+    }
+
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 const app = createApp(App)
   .use(IonicVue)
-  .use(router);
+  .use(router)
 
 router.isReady().then(() => {
   app.mount('#app');
