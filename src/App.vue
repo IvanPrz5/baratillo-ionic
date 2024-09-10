@@ -1,9 +1,18 @@
 <template>
-  <ion-app>
-    <ion-router-outlet />
-  </ion-app>
+  <router-view></router-view>
 </template>
 
 <script setup lang="ts">
-import { IonApp, IonRouterOutlet } from '@ionic/vue';
 </script>
+
+
+
+<!-- 
+Ios Build on Info.plist
+<key>NSBluetoothAlwaysUsageDescription</key>
+<string>Uses Bluetooth to connect and interact with peripheral BLE devices.</string>
+<key>UIBackgroundModes</key>
+<array>
+  <string>bluetooth-central</string>
+</array>
+-->

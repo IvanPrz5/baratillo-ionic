@@ -14,7 +14,7 @@ export default class Rules {
     return "Se requieren" + digitosMin + " carácteres ";
   };
 
-  numero = (value: string) => {
+  numero = (value: any) => {
     if (/^[0-9]*(\.[0-9]+)?$/.test(value)) return true;
     return "Solo números";
   };

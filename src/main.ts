@@ -34,6 +34,7 @@ import '@ionic/vue/css/palettes/dark.system.css';
 /* Theme variables */
 import './theme/variables.css';
 import axios from 'axios';
+import pinia from '@/store';
 
 axios.interceptors.request.use(
   (config) => {
@@ -56,6 +57,7 @@ axios.interceptors.request.use(
 const app = createApp(App)
   .use(IonicVue)
   .use(router)
+  .use(pinia)
 
 router.isReady().then(() => {
   app.mount('#app');

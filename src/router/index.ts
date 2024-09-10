@@ -1,13 +1,13 @@
 import { createRouter, createWebHistory } from '@ionic/vue-router';
-import { RouteRecordRaw } from 'vue-router';
 import Login from '@/views/Login/Login.vue';
 import Cobros from '@/views/Cobros/Cobros.vue';
-import CobrosTable from '@/views/Cobros/CobrosTable.vue';
+import AutorizarCobro from '@/views/Cobros/AutorizarCobro.vue';
+import Ventas from '@/views/ventas/Ventas.vue';
 
-const routes: Array<RouteRecordRaw> = [
+const routes = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/home'
   },
   {
     path: '/login',
@@ -15,15 +15,27 @@ const routes: Array<RouteRecordRaw> = [
     component: Login
   },
   {
-    path: '/home',
-    name: 'Home',
-    component: Cobros
-  },
-  {
-    path: '/cobros-details',
-    name: 'CobrosDetails',
-    component: CobrosTable
-  }
+    path: '/',
+    component: () => import('@/layout/Layout.vue'),
+    children: [
+      {
+        path: '/home',
+        name: 'Home',
+        component: Cobros
+      },
+      {
+        path: '/autorizar-cobro',
+        name: 'AutorizarCobro',
+        component: AutorizarCobro
+      },
+      {
+        path: '/ventas',
+        name: 'Ventas',
+        component: Ventas
+      }
+  ]
+}
+  
 ]
 
 const router = createRouter({
@@ -31,7 +43,7 @@ const router = createRouter({
   routes
 })
 
-/* router.beforeEach((to, from, next) => {
+router.beforeEach((to, _, next) => {
   if(to.matched.some((record) => record.meta.requiresAuth)){
     if(localStorage.getItem("token") != undefined){
       next();
@@ -41,6 +53,6 @@ const router = createRouter({
   }else{
     next();
   }
-}); */
+});
 
 export default router

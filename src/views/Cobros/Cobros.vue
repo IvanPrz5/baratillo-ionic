@@ -2,47 +2,43 @@
   <ion-page>
     <ion-header :translucent="true">
       <ion-toolbar>
-        <ion-title>Blank</ion-title>
+        <ion-title>Comprar</ion-title>
       </ion-toolbar>
     </ion-header>
 
     <ion-content :fullscreen="true">
-      <ion-header collapse="condense">
-        <ion-toolbar>
-          <ion-title size="large">Comprar</ion-title>
-          
-        </ion-toolbar>
-      </ion-header>
-
       <ion-card>
-        <Form @submit="cobrar">
+        <div class="control-custom">
+          <img src="@/assets/caja-registradora.png" height="200" alt="" />
+        </div>
+        <Form @submit="cobrar" v-slot="{ handleReset }" >
           <ion-grid>
             <ion-row>
               <ion-col size="12">
                 <Field name="nombre" v-slot="{ handleChange, value, errorMessage }" :rules="rules.requerido">
-                  <ion-input :value="value" label="Nombre" label-placement="floating" fill="outline" :clear-input="true"
-                    @input="handleChange"></ion-input>
-                  <ion-text color="danger"><sub>{{ errorMessage }} </sub></ion-text>
+                  <ion-input :value="value" label="Producto" label-placement="floating" fill="outline" :clear-input="true"
+                    @input="handleChange" :helper-text="errorMessage" class="custom"></ion-input>
                 </Field>
               </ion-col>
 
               <ion-col size="12">
                 <Field name="concepto" v-slot="{ handleChange, value, errorMessage }" :rules="rules.requerido">
-                  <ion-textarea :value="value" label="Solid textarea" label-placement="floating" fill="outline"
-                    placeholder="Enter text" :auto-grow="true" :counter="true" :maxlength="250"
-                    @input="handleChange"></ion-textarea>
-                  <ion-text color="danger"><sub>{{ errorMessage }} </sub></ion-text>
+                  <ion-textarea :value="value" label="Descripcion" label-placement="floating" fill="outline"
+                    :auto-grow="true" :counter="true" :maxlength="250" @input="handleChange"  class="custom" :helper-text="errorMessage"></ion-textarea>
                 </Field>
               </ion-col>
 
               <ion-col size="12">
-                <Field name="importe" v-slot="{ handleChange, value, errorMessage }" :rules="rules.requerido">
+                <Field name="importe" v-slot="{ handleChange, value, errorMessage }"
+                  :rules="[rules.requerido, rules.numero]">
                   <ion-input :value="value" label="Importe" label-placement="floating" fill="outline"
-                    @input="handleChange"></ion-input>
-                  <ion-text color="danger"><sub>{{ errorMessage }} </sub></ion-text>
+                    @input="handleChange" type="number"  class="custom" :helper-text="errorMessage"></ion-input>
                 </Field>
               </ion-col>
-              <ion-col size="12">
+              <ion-col size="6">
+                <ion-button color="warning" expand="block" @click="handleReset">Limpiar</ion-button>
+              </ion-col>
+              <ion-col size="6">
                 <ion-button expand="block" type="submit">Cobrar</ion-button>
               </ion-col>
             </ion-row>
@@ -51,7 +47,6 @@
       </ion-card>
     </ion-content>
   </ion-page>
-  <AutorizarCobro :isOpen="isOpen" :cobros="cobros" @close="close" />
 </template>
 
 <script lang="ts" setup>
@@ -68,33 +63,35 @@ import {
   IonInput,
   IonTextarea,
   IonButton,
-  IonText,
 } from "@ionic/vue";
-import { ref } from "vue";
-import AutorizarCobro from "./AutorizarCobro.vue";
 import { Form, Field } from "vee-validate";
+
 import Rules from "@/utils/Rules";
-import { ICobrosPost } from "@/interface/Cobros/ICobros";
+import router from "@/router";
+import { ICobrosExt } from "@/interface/Cobros/ICobros";
 
 const rules = new Rules();
-const isOpen = ref(false);
-const cobros = ref<ICobrosPost>({
-  nombre: "",
-  importe: null,
-  concepto: "",
-  fechaCobro: "",
-  folio: "",
-  status: true,
-  idUsuarioCobro: { id: 1 },
-});
 
 // revisar el tipo de value 
 const cobrar = (values: any) => {
-  isOpen.value = true;
-  cobros.value = values;
+  localStorage.setItem("cobro", JSON.stringify(values as ICobrosExt))
+  router.push({ path: "/autorizar-cobro" })
 }
 
-function close() {
-  isOpen.value = false;
-}
 </script>
+
+<style>
+  ion-input.custom.ios .input-bottom .helper-text,
+  ion-input.custom.md .input-bottom .helper-text,
+  ion-textarea.custom.ios .textarea-bottom .helper-text,
+  ion-textarea.custom.md .textarea-bottom .helper-text {
+    color: red;
+  }
+
+  .control-custom{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+</style>

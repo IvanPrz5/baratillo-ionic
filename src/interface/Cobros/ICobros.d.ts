@@ -4,9 +4,9 @@ export interface ICobros {
   concepto: string;
 }
 
-export interface ICobrosPost extends ICobros{
+export interface ICobrosExt extends ICobros{
   fechaCobro: string;
   folio: string;
   status: boolean;
-  idUsuarioCobro: { id: number };
+  idUsuarioCobro: { id: number | undefined };
 }
